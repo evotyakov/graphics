@@ -1,31 +1,53 @@
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <stdbool.h>
 #include "graphics.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char* argv[]) 
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+    {
+        printf("SDL_Init failed: %s\n", SDL_GetError());
+        return 1;
+    }
 
     SDL_Window* window = SDL_CreateWindow(
-        "Serpinsky triangle",
+        "Sierpinski Triangle",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         WIDTH,
         HEIGHT,
-        SDL_WINDOW_SHOWN
+        SDL_WINDOW_RESIZABLE
     );
 
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-    const int depth = 3;
-    bool running = true;
-
-    while (running)
+    if (!window) 
     {
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
+        printf("Failed to create window: %s\n", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
+
+    SDL_Renderer *renderer = SDL_CreateRenderer(
+        window,
+        -1,
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+    );
+
+    if (!renderer) 
+    {
+        printf("Failed to create renderer: %s\n", SDL_GetError());
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+
+    bool running = true;
+    SDL_Event event;
+
+    while (running) 
+    {
+        while (SDL_PollEvent(&event)) 
         {
-            if (event.type == SDL_QUIT)
+            if (event.type == SDL_QUIT) 
             {
                 running = false;
             }
@@ -34,10 +56,15 @@ int main(int argc, char* argv[])
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        draw_sierpinski(renderer, WIDTH / 2, 100, 100, HEIGHT - 100, WIDTH - 100, HEIGHT - 100, depth);
+        draw_sierpinski(
+            renderer, 
+            WIDTH / 2, 100,
+            100, HEIGHT - 100,
+            WIDTH - 100, HEIGHT - 100,
+            MAX_DEPTH
+        );
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(16);
     }
 
     SDL_DestroyRenderer(renderer);

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
-#define WIDTH  800  
-#define HEIGHT 700  
+#define WIDTH 800
+#define HEIGHT 600 
 #define MAX_DEPTH 5  
 
 void draw_sierpinski(

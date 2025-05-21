@@ -1,22 +1,19 @@
 #include "graphics.h"
 
 void draw_sierpinski(
-    SDL_Renderer *renderer,
+    SDL_Renderer* renderer,
     int x1, int y1,
     int x2, int y2,
     int x3, int y3,
     int depth
-)
+) 
 {
-    if (depth <= 0)
+    if (depth <= 0) 
     {
-        SDL_Vertex vertices[3] =
-        {
-            {{(float)x1, (float)y1}, {255, 255, 255, 255}, {0}},
-            {{(float)x2, (float)y2}, {255, 255, 255, 255}, {0}},
-            {{(float)x3, (float)y3}, {255, 255, 255, 255}, {0}}
-        };
-        SDL_RenderGeometry(renderer, NULL, vertices, 3, NULL, 0);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+        SDL_RenderDrawLine(renderer, x2, y2, x3, y3);
+        SDL_RenderDrawLine(renderer, x3, y3, x1, y1);
         return;
     }
 
