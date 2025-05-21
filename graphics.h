@@ -4,7 +4,7 @@
 
 #define WIDTH 800
 #define HEIGHT 600 
-#define MAX_DEPTH 5  
+#define MAX_DEPTH 8 
 
 void draw_sierpinski(
     SDL_Renderer* renderer,
